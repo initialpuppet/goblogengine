@@ -1,0 +1,22 @@
+{{define "title"}}Welcome{{end}} {{define "body"}}
+
+{{template "adminmenu" .PageName}}
+<div id="admincontainer" class="row column">
+    <h2>Welcome</h2>
+    <p>Your Google account 
+        <!-- TODO: Pass email only to this view, before Author is registered -->
+        <!-- with email address 
+    <span id="email-highlight"></span>  -->
+    has administrative 
+    access. To continue, please specify how you would like your name to appear 
+    on posts.</p>
+
+    <form method="POST">
+        <label for="DisplayName">Display name
+            <input id="DisplayName" name="DisplayName" type="text">
+        </label>
+
+        <input type="submit" value="Continue" class="button">
+    </form>
+</div>
+{{end}}

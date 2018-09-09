@@ -1,0 +1,45 @@
+{{define "title"}}Admin{{end}} {{define "body"}}
+
+{{template "adminmenu" .PageName}}
+
+<div id="admincontainer" class="row column">
+    <h2>Dashboard</h2>
+
+    <ul class="stats-list">
+        <li>
+            {{.Data.PostCount}} 
+            <span class="stats-list-label">{{if eq .Data.PostCount 1}}Post{{else}}Posts{{end}}</span>
+        </li>
+        <li>
+            {{.Data.DraftCount}}
+            <span class="stats-list-label">{{if eq .Data.DraftCount 1}}Draft{{else}}Drafts{{end}}</span>
+        </li>
+        <li>
+            {{.Data.AuthorCount}} 
+            <span class="stats-list-label">{{if eq .Data.AuthorCount 1}}Author{{else}}Authors{{end}}</span>
+        </li>
+        <li>
+            {{.Data.CategoryCount}}
+            <span class="stats-list-label">{{if eq .Data.CategoryCount 1}}Category{{else}}Categories{{end}}</span>
+        </li>
+        <li>
+            {{.Data.ImageCount}}
+            <span class="stats-list-label">{{if eq .Data.ImageCount 1}}Image{{else}}Images{{end}}</span>
+        </li>
+    </ul>
+
+    {{with .Data.AuditEvents}}
+    <h3>Recent activity</h3>
+    <table class="hover stack auditlog">
+        {{range .}}
+        <tr>
+            <td class="date">{{.When.Format $.DateFormat}}</td>
+            <td>{{.Text}}</td>
+            <td class="email">{{.Who}}</td>
+        </tr>
+        {{end}}
+    </table>
+    {{end}}
+</div>
+
+{{end}}

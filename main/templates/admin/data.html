@@ -1,0 +1,74 @@
+{{define "title"}}Data{{end}} {{define "body"}}
+
+{{template "adminmenu" .PageName}}
+<div id="admincontainer" class="row column">
+    <h2>Data</h2>
+    <p>Posts may be imported and exported as text files matching the <a data-toggle="format-example">example format</a>.</p>
+    <pre id="format-example" class="code hide" data-toggler=".hide">
+The first post in the file
+2006-01-02
+category1, category2, category with spaces
+
+Post fields are separated by line breaks and consist of:
+
+* Title
+* Publish date with optional time
+* Comma separated category list (can be blank)
+* Content as markdown
+
+Images are not supported and can be added via the editor after import. Each post is terminated by ^^ which must appear on its own line.
+^^
+The second post in the file
+2006-01-02 15:04
+
+
+This post has a date and time, but no categories. The line for the categories is blank.
+^^</pre>
+
+    <h3>Import posts</h3>
+    <p>Imported posts will have their author set to <span class="author-name-highlight">{{.User.DisplayName}}</span>.</p>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="row align-middle">
+            <div class="column shrink">
+                <label for="importfile" class="button">Select file</label>
+                <input id="importfile" name="importfile" type="file" class="show-for-sr">
+            </div>
+            <div class="column" id="selectedfilename"></div>
+        </div>
+
+        <div class="row switch-container">
+            <div class="column shrink align-self-middle">Publish imported posts immediately</div>
+            <div class="column shrink">
+                <div class="switch">
+                    <input class="switch-input" id="PublishImmediately" name="PublishImmediately" type="checkbox">
+                    <label class="switch-paddle" for="PublishImmediately">
+                        <span class="show-for-sr">Publish imported posts immediately</span>
+                        <span class="switch-inactive">No</span>
+                        <span class="switch-active">Yes</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" value="Upload and import posts" class="button success">
+    </form>
+
+    <h3>Export posts</h3>
+    <p>Posts can be exported to a text file and downloaded.</p>
+    <form method="POST" action="/admin/data/export">
+        <input type="submit" class="button" value="Download posts">
+    </form>
+
+</div>
+
+<script>
+$(function() {
+    $("#importfile").on("change", function (e) {
+        var pathTokens = this.value.split("\\");
+        var filename = pathTokens[pathTokens.length-1];
+        $("#selectedfilename").text(filename);
+    });
+});
+</script>
+
+{{end}}

@@ -1,0 +1,185 @@
+// Public global
+#sitebanner {
+    height: 200px;
+}
+
+ul.tags-list {
+    list-style-type: none;
+    margin: 0 0 rem-calc(10) 0;
+    text-align: justify;
+
+    & > li {
+        display: inline;
+        margin: 0 rem-calc(6) 0 0;
+    }
+}
+
+// post
+#postcategories {
+    margin-top: rem-calc(20px);
+}
+
+// Admin global
+.flashes div {
+    margin: rem-calc(10) 0;
+    text-align: center;
+}
+
+#adminmenu {
+    margin-top: 1em;
+    background: $light-gray;
+    border: 1px solid $dark-gray;
+    border-bottom: none;
+    padding: 0;
+}
+
+#admincontainer {
+    border: 1px solid $dark-gray;
+    padding-top: 0.5em;
+    margin-bottom: rem-calc(20);
+
+    h2 {
+        border-bottom: 1px solid $dark-gray;
+    }
+}
+
+form.form-inline {
+    display: inline;
+}
+
+div.switch-container {
+    margin-bottom: $form-spacing;
+}
+
+pre.code {
+    background: $code-background;
+    border: $code-border;
+    padding: $code-padding;
+    font-size: $small-font-size;
+}
+
+// admin/adminhome
+ul.stats-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-bottom: rem-calc(30);
+  
+    & > li {
+        display: inline-block;
+        margin-right: rem-calc(10);
+        padding-right: rem-calc(10);
+        border-right: 1px solid $medium-gray;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+
+        &:last-child {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .stats-list-label {
+            display: block;
+            margin-top: rem-calc(2);
+            font-size: 1em;
+            font-weight: normal;
+        }
+    }
+}
+
+table.auditlog {
+    font-size: $small-font-size;
+
+    td.date {
+        width: rem-calc(220);
+    }
+
+    td.email {
+        text-align: right;
+        @include breakpoint($table-stack-breakpoint down) {
+            text-align: left;
+        }
+    }
+}
+
+// admin/authorlist
+table.authorlist .current {
+    width: rem-calc(5);
+    background-color: $success-color;
+}
+
+// admin/authorinsert
+span#email-highlight {
+    font-weight: bold;
+    font-family: $font-family-monospace;
+    padding: rem-calc(2);
+    background: $light-gray;
+}
+
+// admin/postedit
+body.admin-postedit {
+    #img-lib {
+        text-align: center;
+        padding: 20px 0;
+        max-height: 300px;
+        overflow: scroll;
+        
+        .thumbnail {
+            width: 200px;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + label img {
+            box-shadow: $thumbnail-shadow-hover;
+        }
+    }
+
+    textarea#BodyMarkdown {
+        height: rem-calc(500px);
+    }
+
+    #img-lib-close {
+        margin: 0;
+    }
+
+    form tags {
+        margin-bottom: $form-spacing;
+    }
+}
+
+// admin/data
+span.author-name-highlight {
+    font-weight: bold;
+    font-family: $font-family-monospace;
+    padding: rem-calc(2);
+    background: $light-gray;
+}
+
+// admin/image-library
+div.imglib.card {
+    position: relative;
+
+    .card-section {
+        text-align: center;
+    }
+
+    input.delete {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    input.img-url {
+        font-size: $small-font-size;
+        cursor: text;
+        padding: rem-calc(5);
+        margin: 0;
+        height: 2em;
+    }
+}

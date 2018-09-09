@@ -1,0 +1,175 @@
+{{define "title"}}
+{{if .Data.NewPost }}Write post{{else}}Edit post - {{.Data.Title}}{{end}}
+{{end}}
+
+{{define "body"}}
+
+{{ if .Data.ValidationErrors }}
+<div class="row column flashes">
+    <div class="callout alert small">Please correct the errors before continuing.</div>
+</div>
+{{end}}
+
+{{template "adminmenu" .PageName}}
+
+<div id="admincontainer" class="row column">    
+    {{if .Data.NewPost}}
+    <h2>Write post</h2>
+    {{else}}
+    <h2>Edit post<br> <small>{{.Data.Title}}</small></h2>
+    {{end}}
+
+    {{if ne .Data.VersionCount 0}}
+    <h3>All versions</h3>
+    <table class="hover stack">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Data.Versions}}
+            <tr>
+                <td>
+                    {{if .Published}}
+                    <a href="{{.PostURL}}" target="postpreview">{{.Title}}</a>
+                    {{else}}
+                    <a href="{{.PreviewURL}}" target="postpreview">{{.Title}}</a>
+                    {{end}}
+                </td>
+                <td>{{.DateCreated.Format $.DateFormat}}</td>
+                <td>
+                    <a class="button small" href="{{.EditURL}}">Edit</a> 
+                    {{if .Published}}
+                    <a class="button small" href="{{.PostURL}}" target="postpreview">View</a>
+                    <form action="/admin/post/unpublish" method="POST" class="form-inline">
+                        <input type="hidden" name="PostID" value="{{.PostID}}">
+                        <input type="hidden" name="EditURL" value="{{.EditURL}}">
+                        <input type="submit" class="button small warning" value="Unpublish">
+                    </form>
+                    {{else}}
+                    <a class="button small" href="{{.PreviewURL}}" target="postpreview">Preview</a> 
+                    {{end}}
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+    {{end}}
+
+    <form method="POST">
+        <input name="PostID" type="hidden" value="{{.Data.PostID}}">
+
+        <label for="Title">Title
+            <input id="Title" name="Title" value="{{.Data.Title}}" type="text">
+        </label>
+
+        <div class="row column center text-center">
+            <button id="img-lib-open" data-toggler=".hide" type="button" data-toggle="img-lib img-lib-open img-lib-close" class="button small">Choose a banner image</button>
+            <button id="img-lib-close" data-toggler=".hide" type="button" data-toggle="img-lib img-lib-open img-lib-close" class="button small hide secondary">Don't choose a banner image</button>
+        </div>
+        <fieldset id="img-lib" data-toggler=".hide" class="hide">
+            <legend class="show-for-sr">Choose an image</legend>
+        </fieldset>
+
+        <label for="BodyMarkdown">Body
+            <textarea id="BodyMarkdown" name="BodyMarkdown" aria-describedby="BodyHelpText">{{.Data.BodyMarkdown}}</textarea>
+        </label>
+        <p class="help-text" id="BodyHelpText">Content should be entered in <a target="_blank" href="https://daringfireball.net/projects/markdown/syntax">Markdown</a> format.</p>
+
+        <label for="CategoryList">Categories
+            <input type="text" name="CategoryList" id="CategoryList" value="{{.Data.CategoryList}}">
+        </label>
+        
+        {{if .Data.NewPost}}
+        <label for="Slug">URL
+            {{with .Data.ValidationErrors.Slug}}
+            <span class="error">{{.}}</span>
+            {{end}}
+            <input id="Slug" name="Slug" value="{{.Data.Slug}}" type="text" placeholder="Leave blank to auto-generate a URL">
+        </label>
+        {{else}}
+        <input name="Slug" type="hidden" value="{{.Data.Slug}}">
+        {{end}}
+
+        <label for="DatePublished">
+            Date Published
+            {{with .Data.ValidationErrors.DatePublished}}
+            <span class="error">{{.}}</span>
+            {{end}}
+            <input id="DatePublished" name="DatePublished" value="{{.Data.DatePublished}}" type="datetime-local">
+        </label>
+        <p class="help-text">Format: 2006-01-02T15:04, or use your browser's date picker.</p>
+
+        <div class="row switch-container">
+            <div class="column shrink align-self-middle">Publish this version</div>
+            <div class="column shrink">
+                <div class="switch">
+                    <input class="switch-input" id="PublishImmediately" name="PublishImmediately" type="checkbox">
+                    <label class="switch-paddle" for="PublishImmediately">
+                        <span class="show-for-sr">Publish this version</span>
+                        <span class="switch-inactive">No</span>
+                        <span class="switch-active">Yes</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" value="Save" class="success button">
+    </form>
+
+</div>
+
+<script type="text/x-tmpl" id="img-thumbnail">
+    <input type="radio" name="BannerImageURL" value="{%=o.URL%}" id="img{%=o.ID%}"> 
+    <label for="img{%=o.ID%}">
+        <img src="{%=o.URL%}" alt="{%=o.Name%}" class="thumbnail">
+    </label>
+</script>
+
+<!-- Categories returned from the server to be used by client side scripts -->
+<script>
+    var categories = [{{range .Data.AllCategories}}"{{.}}",{{end}}];
+</script>
+
+<script>
+    var simplemde = new SimpleMDE({
+        autoDownloadFontAwesome: false,
+        element: document.getElementById("BodyMarkdown"),
+        spellChecker: false,
+    });
+
+    var cats = document.getElementById("CategoryList")
+    t = new Tagify(cats, {
+        whitelist: categories
+    })
+    $(cats).hide()
+</script>
+
+<script>
+    $(function(){
+        $("#img-lib").on("off.zf.toggler", function(e) {
+            $.ajax({
+                type: "GET",
+                url: "/admin/image/list.json",
+                dataType: "json"
+            }).done(function(e, success) {
+                if(success && e.Images != null) {
+                    $.each(e.Images, function(i, o){
+                        $("#img-lib").prepend(tmpl("img-thumbnail", o)).children().first();
+                    });
+                } else {
+                    $("#img-lib").text("No images in library");
+                }
+            });
+        });
+
+        $("#img-lib").on("on.zf.toggler", function(e) {
+            $(e.target).html("");
+        })
+    });
+</script>
+
+{{end}}

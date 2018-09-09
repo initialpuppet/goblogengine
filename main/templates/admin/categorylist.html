@@ -1,0 +1,45 @@
+{{define "title"}}Categories{{end}} {{define "body"}}
+
+{{template "adminmenu" .PageName}}
+<div id="admincontainer" class="row column">
+    <h2>Categories</h2>
+    <p>Categories are usually added when writing new posts, but they can also be added here.</p>
+
+    <form method="POST">
+        <div class="input-group">
+            <input class="input-group-field" id="Title" name="Title" type="text" placeholder="Category name">
+            <div class="input-group-button">
+                <input type="submit" class="button success" value="Add category">
+            </div>
+        </div>
+    </form>
+
+    {{with .Data.Categories}}
+    <table class="hover">
+        <thead>
+            <tr>
+                <th width="400">Category</th>
+                <th width="300"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {{range .}}
+            <tr>
+                <td>{{.Title}}</td>
+                <td>
+                    <a class="button small" href="{{.URL}}">Posts</a>
+                    <form method="POST" action="/admin/category/delete" class="form-inline">
+                        <input type="hidden" name="Slug" id="Slug" value="{{.Slug}}">
+                        <input type="submit" value="Delete" class="button small alert">
+                    </form>
+                </td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+    {{else}}
+    <div class="callout secondary small">No categories yet</div>
+    {{end}}
+</div>
+
+{{end}}

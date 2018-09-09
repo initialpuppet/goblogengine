@@ -1,0 +1,140 @@
+{{define "title"}}Images{{end}} 
+
+{{define "body"}}
+{{template "adminmenu" .PageName}}
+<div id="admincontainer" class="row column">
+    <h2>Images</h2>
+
+    <!-- <form method="POST" action="" enctype="multipart/form-data">
+        <div>
+            <label for="imageupload" class="button">Select images</label>
+            <input id="imageupload" type="file" name="files" class="show-for-sr" multiple>
+        </div>
+        <input type="submit" class="button" value="Upload">    
+    </form> -->
+
+    <div class="row align-center">
+        <div class="small-12 medium-6">
+            <label for="img-input" class="button large" style="width:100%">Add image</label>
+            <input data-url="/admin/image/upload" id="img-input" name="img-input" type="file" class="show-for-sr" aria-describedby="imagehelptext">
+            <div id="img-progress" class="progress hide" role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-meter"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <h3>Library</h3>
+    {{with .Data.Images}}
+    <div id="img-lib" class="row">
+        {{range .}}
+        <div class="column small-12 medium-6 large-3">
+            <div class="imglib card">
+                <img src="{{.URL}}" />
+                <div class="card-section">
+                    <form method="POST" action="/admin/image/update">
+                        <input type="hidden" name="ID" value="{{.ID}}">
+                        <input type="text" class="img-name" name="Name" value="{{.Name}}" placeholder="Enter a name">
+                        <input type="text" class="img-url" value="{{.URL}}" readonly>
+                    </form>
+                </div>
+                <form method="POST" action="/admin/image/delete">
+                    <input type="hidden" name="id" value="{{.ID}}">
+                    <input type="submit" class="delete alert button small" value="X">
+                </form>
+            </div>
+        </div>
+        {{end}}
+    </div>
+
+    <h3>Delete</h3>
+    <p>Delete all images. This is permanent.</p>
+    <form method="POST" action="/admin/image/deleteall">
+        <input type="submit" class="alert button" value="Delete all">
+    </form>
+    {{else}}
+    <div id="img-lib">
+        <div class="callout secondary small">No images yet</div>
+    </div>
+    {{end}}
+</div>
+
+<script type="text/x-tmpl" id="img">
+    <div class="column small-12 medium-6 large-3">
+        <div class="imglib card">
+            <img src="{%=o.URL%}" />
+            <div class="card-section">
+                <form method="POST" action="/admin/image/update">
+                    <input type="hidden" name="ID" value="{%=o.ID%}">
+                    <input type="text" class="img-name" name="Name" value="{%=o.Name%}" placeholder="Enter a name">
+                    <input type="text" class="img-url" value="{%=o.URL%}" readonly>
+                </form>
+            </div>
+            <form method="POST" action="/admin/image/delete">
+                <input type="hidden" name="id" value="{%=o.ID%}">
+                <input type="submit" class="delete alert button small" value="X">
+            </form>
+        </div>
+    </div>
+</script>
+
+<script>
+    function setupImageCard(imageCard) {
+        imageCard = $(imageCard);
+        var url = imageCard.find("input.img-url");
+        url.on("click", function (e) {
+            e.target.select();
+        });
+
+        var name = imageCard.find("input.img-name");
+        name.on("blur keyup", function (e) {
+            if ((e.type == "keyup" && e.key == "Enter") || e.type == "blur") {
+                var form = $(e.target).parent("form");
+                var data = form.serialize();
+                $.ajax({
+                    type: "POST",
+                    url: form[0].action,
+                    data: data,
+                    dataType: "json"
+                });
+            }
+        });
+    }
+
+    $("#img-lib>div").each(function (i, elem) {
+        setupImageCard(elem);
+    });
+
+    $(function () {
+        $("#img-input").fileupload({
+            dataType: "json",
+            submit: function (e, data) {
+                $("#img-progress").removeClass("hide");
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $("#img-progress .progress-meter").css(
+                    "width",
+                    progress + '%'
+                );
+            },
+            done: function (e, data) {
+                $("#img-lib .callout").remove();
+                $("#img-lib").addClass("row");
+
+                var inserted = $("#img-lib").prepend(tmpl("img", data.result)).children().first()
+                setupImageCard(inserted);
+
+                $("#img-progress").addClass("hide");
+                $("#img-progress .progress-meter").css("width", "0%");
+            },
+            fail: function(e, data) {
+                console.log(e);
+                console.log(data);
+            }
+        });
+    });
+
+</script>
+
+{{end}}

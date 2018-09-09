@@ -1,0 +1,61 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{template "title" .}} - GoBlogEngine</title>
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="stylesheet" href="/static/css/simplemde.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/tagify.css">
+
+    <!-- TODO: merge into a single file or selectively load -->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/jquery.iframe-transport.js"></script>
+    <script src="/static/js/jquery.ui.widget.js"></script>
+    <script src="/static/js/jquery.fileupload.js"></script>    
+    <script src="/static/js/foundation.min.js"></script>
+    <script src="/static/js/simplemde.min.js"></script>
+    <script src="/static/js/tagify.js"></script>
+    <script src="/static/js/tmpl.js"></script>
+    <script src="/static/js/app.min.js"></script>
+
+    <!-- TODO: only on blog pages -->
+    <link rel="alternate" type="application/atom+xml" title="GoBlogEngine Feed" href="/atom" />
+</head>
+
+<body class="{{.PageName}}">
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <ul class="menu">
+                <li><a href="/">GoBlogEngine</a></li>
+            </ul>
+        </div>
+        <div class="top-bar-right">
+            <ul class="menu">
+                {{if .User}}
+                <li class="menu-text">{{.User.DisplayName}}<span class="email show-for-medium"> ({{.User.Email}})</span></li>
+                <li class="{{if eq .PageName "admin"}}active{{end}}"><a href="/admin">Admin</a></li>
+                {{end}}
+            </ul>
+        </div>
+    </div>
+
+    {{with .Flashes}}
+    <div class="row column flashes">
+        {{range .}}
+        <div class="callout primary small">{{.}}</div>
+        {{end}}
+    </div>
+    {{end}}
+
+    {{template "body" .}}
+
+    <script>
+        $(document).foundation();
+    </script>
+</body>
+
+</html>

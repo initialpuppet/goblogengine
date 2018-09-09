@@ -1,0 +1,86 @@
+{{define "title"}}Home{{end}} {{define "body"}} 
+
+<div class="callout large primary" id="sitebanner">
+    <div class="row column text-center">
+        <h1>GoBlogEngine</h1>
+    </div>
+</div>
+
+<div class="row align-center" id="content">
+    {{if eq .Data.PostCount 0}}
+    <div class="column">
+        <h3>No posts yet</h3>
+    </div>
+    {{else}}
+    <div class="small-12 medium-8 column">
+        {{range .Data.Posts}}
+        <div class="blog-post">
+            <h3>
+                <a href="{{.URL}}">{{.Title}}</a>
+                <small><time class="date published" title="{{.DatePublished}}" datetime="{{.DatePublished}}">{{.DatePublishedDisplay}}</time></small>
+            </h3>
+            {{with .BannerImageURL}}
+            <img class="thumbnail" src="{{.}}">
+            {{end}}
+            <p>{{.BodyShortHTML}}</p>
+            <div class="callout secondary small">
+                <div class="row">
+                    <div class="column small-3">
+                            By <a href="{{.AuthorURL}}" title="Posts by {{.AuthorName}}">{{.AuthorName}}</a>
+                    </div>
+                    <div class="column small-9">
+                        {{with .Categories}}
+                        <ul class="menu simple align-right">
+                            {{range .}}
+                            <li><a href="{{.URL}}">{{.Title}}</a></li>
+                            {{end}}
+                        </ul>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{end}}
+
+        <ul class="pagination text-center" role="navigation" aria-label="Pagination">
+            {{if ne .Data.PreviousPageURL ""}}
+            <li><a href="{{.Data.PreviousPageURL}}" aria-label="Previous page">Previous</a></li>
+            {{else}}
+            <li class="disabled">Previous</li>
+            {{end}} 
+            
+            {{range .Data.PageNumbers}} 
+            {{if eq $.Data.CurrentPageNumber .PageNumber}}
+            <li class="current"><span class="show-for-sr">You're on page</span> {{.PageNumber}}</li>
+            {{else}}
+            <li><a href="{{.URL}}" aria-label="Page {{.PageNumber}}">{{.PageNumber}}</a></li>
+            {{end}}
+            {{end}} 
+            
+            {{if ne .Data.NextPageURL ""}}
+            <li><a href="{{.Data.NextPageURL}}" aria-label="Next page">Next</a></li>
+            {{else}}
+            <li class="disabled">Next</li>
+            {{end}}
+        </ul>
+    </div>
+
+    <div class="medium-3 columns" data-sticky-container>
+        <div class="sticky" data-sticky data-anchor="content">
+            <h4>Categories</h4>
+            <ul class="tags-list">
+                {{range .Data.Categories}}
+                <li><a href="{{.URL}}">{{.Title}}</a></li>
+                {{end}}
+            </ul>
+            <h4>Authors</h4>
+            <ul>
+                {{range .Data.Authors}}
+                <li><a href="{{.URL}}">{{.DisplayName}}</a></li>
+                {{end}}
+            </ul>
+        </div>
+    </div>
+    {{end}}
+</div>
+{{end}}

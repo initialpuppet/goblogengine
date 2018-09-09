@@ -1,0 +1,85 @@
+{{define "title"}}Posts{{end}} {{define "body"}}
+
+{{template "adminmenu" .PageName}}
+<div id="admincontainer" class="row column">
+    <h2>Posts</h2>
+    
+    <h3>Queue</h3>
+    {{with .Data.Drafts}}
+    <table class="hover stack">
+        <thead>
+            <tr>
+                <th width="400">Title</th>
+                <th>Last modified</th>
+                <th width="300"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {{range .}}
+            <tr>
+                <td>{{.Title}}</td>
+                <td>{{.DateCreated.Format $.DateFormat}}</td>
+                <td>
+                    <a class="button small" href="{{.EditURL}}">Edit</a>
+                    <a class="button small" href="{{.PreviewURL}}" target="postpreview">Preview</a>
+                    <form action="/admin/post/publish" method="POST" class="form-inline">
+                        <input type="hidden" name="PostID" value="{{.PostID}}">
+                        <input type="hidden" name="PostTitle" value="{{.Title}}">
+                        <input type="hidden" name="Version" value="{{.Version}}">
+                        <input type="submit" class="button small success" value="Publish">
+                    </form>
+                    <form action="/admin/post/delete" method="POST" class="form-inline">
+                        <input type="hidden" name="PostID" value="{{.PostID}}">
+                        <input type="hidden" name="PostTitle" value="{{.Title}}">
+                        <input type="submit" class="button small alert" value="Delete">
+                    </form>
+                </td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+    {{else}}
+    <div class="callout secondary small">Nothing in the queue</div>
+    {{end}}
+
+    <h3>Published</h3>
+    {{with .Data.Posts}}
+    <table class="hover stack">
+        <thead>
+            <tr>
+                <th width="400">Title</th>
+                <th>Date published</th>
+                <th width="300"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {{range .}}
+            <tr>
+                <td>{{.Title}}</td>
+                <td>{{.DatePublished.Format $.DateFormat}}</td>
+                <td>
+                    <a class="button small" href="{{.EditURL}}">Edit</a>
+                    <a class="button small" href="{{.PostURL}}" target="postpreview">View</a>
+                    <form action="/admin/post/unpublish" method="POST" class="form-inline">
+                        <input type="hidden" name="PostID" value="{{.PostID}}">
+                        <input type="hidden" name="ContinueURL" value="/admin/post/list">
+                        <input type="hidden" name="PostTitle" value="{{.Title}}">
+                        <input type="submit" class="button small warning" value="Unpublish">
+                    </form>
+                    <form action="/admin/post/delete" method="POST" class="form-inline">
+                        <input type="hidden" name="PostID" value="{{.PostID}}">
+                        <input type="hidden" name="PostTitle" value="{{.Title}}">
+                        <input type="submit" class="button small alert" value="Delete">
+                    </form>
+                </td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+    {{else}}
+    <div class="callout secondary small">No posts yet</div>
+    {{end}}
+
+</div>
+
+{{end}}

@@ -1,0 +1,15 @@
+{{define "adminmenu"}}
+<div id="adminmenu" class="row column">
+    <ul class="menu">
+        <li class="menu-text">Administration</li>
+        <li {{if eq . "admin-adminhome"}}class="is-active"{{end}}><a href="/admin">Dashboard</a></li>
+        <li {{if eq . "admin-postedit"}}class="is-active"{{end}}><a href="/admin/post/add">Write</a></li>
+        <li {{if eq . "admin-postlist"}}class="is-active"{{end}}><a href="/admin/post/list">Posts</a></li>
+        <li {{if eq . "admin-imagelist"}}class="is-active"{{end}}><a href="/admin/image/list">Images</a></li>
+        <li {{if eq . "admin-categorylist"}}class="is-active"{{end}}><a href="/admin/category/list">Categories</a></li>
+        <li {{if eq . "admin-authorlist"}}class="is-active"{{end}}><a href="/admin/author/list">Authors</a></li>
+        <li {{if eq . "admin-data"}}class="is-active"{{end}}><a href="/admin/data">Data</a></li>
+        <li {{if eq . "admin-reset"}}class="is-active"{{end}}><a href="/admin/reset">Reset</a></li>
+    </ul>
+</div>
+{{end}}

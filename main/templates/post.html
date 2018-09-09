@@ -1,0 +1,44 @@
+{{define "title"}}{{.Data.Title}}{{end}} {{define "body"}}
+
+<!-- TODO: Blog metadata in <head> (dates, author, etc) -->
+
+<div class="row align-center" id="content">
+
+    <div class="column medium-12 large-8">
+        <h1>
+            {{.Data.Title}}
+            {{if .User}}
+            <small><a href="{{.Data.EditURL}}">Edit</a></small>
+            {{end}}
+        </h1>
+        {{with .Data.BannerImageURL}}
+        <img class="callout" src="{{.}}" alt="">
+        {{end}}
+
+        <div class="callout secondary small">
+            <div class="row">
+                <div class="column small-6">
+                    By <a href="{{.Data.AuthorURL}}" title="Posts by {{.Data.AuthorName}}" class="author url fn" rel="author">{{.Data.AuthorName}}</a>
+                </div>
+                <div class="column small-6 text-right">
+                    <time title="{{.Data.DatePublished}}" datetime="{{.Data.DatePublished}}">{{.Data.DatePublishedDisplay}}</time>
+                </div>
+            </div>
+        </div>
+
+        {{.Data.BodyHTML}}
+
+        {{with .Data.Categories}}
+        <div id="postcategories" class="callout secondary small">
+            <ul class="menu simple">
+                <li>Categories</li>
+                {{range .}}
+                <li><a href="{{.Title}}">{{.Title}}</a></li>
+                {{end}}
+            </ul>
+        </div>
+        {{end}}
+    </div>
+
+</div>
+{{end}}

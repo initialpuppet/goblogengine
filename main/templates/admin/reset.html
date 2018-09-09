@@ -1,0 +1,14 @@
+{{define "title"}}Reset{{end}} {{define "body"}}
+
+{{template "adminmenu" .PageName}}
+<div id="admincontainer" class="row column">
+    <h2>Reset</h2>
+    <p class="callout warning">This will delete all data and cannot be reversed.</p>
+
+    <form method="POST">
+        <input type="submit" value="Reset" class="alert button">
+    </form>
+
+</div>
+
+{{end}}

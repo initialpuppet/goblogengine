@@ -1,0 +1,23 @@
+{
+  "name": "goblogengine",
+  "version": "1.0.0",
+  "description": "Blogging system for AppEngine.",
+  "devDependencies": {
+    "@yaireo/tagify": "^1.1.2",
+    "blueimp-file-upload": "^9.18.0",
+    "blueimp-tmpl": "^3.11.0",
+    "font-awesome": "^4.7.0",
+    "foundation-datepicker": "^1.5.6",
+    "foundation-sites": "^6.4.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^3.0.0",
+    "simplemde": "^1.11.2"
+  },
+  "author": "initialpuppet",
+  "license": "MIT",
+  "private": true
+}

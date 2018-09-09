@@ -1,0 +1,32 @@
+{{define "title"}}Authors{{end}} {{define "body"}}
+
+{{template "adminmenu" .PageName}}
+<div id="admincontainer" class="row column">
+    <h2>Authors</h2>
+    <p>Authors log in using their Google Account. Users must be added via the
+    Google Cloud Console.</p>
+
+    <table class="hover authorlist">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Email</th>
+                <!-- <th>Google Account ID</th> -->
+                <th></th>
+            </tr>
+        </thead>
+        {{range .Data.Authors}}
+        <tr>
+            <td{{if .Current}} class="current"{{end}}></td>
+            <td>{{.DisplayName}}</td>
+            <td>{{.Email}}</td>
+            <!-- <td>{{.GoogleAccountID}}</td> -->
+            <td><a href="{{.URL}}" class="button small">Posts</a></td>
+        </tr>
+        {{end}}
+    </table>
+
+</div>
+
+{{end}}
